@@ -43,6 +43,6 @@ jobs:
         chmod 600 key.pem
     - name: Pull Docker image
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} "sudo docker pull ${DOCKER_USER}/flaskproject:latest"
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} "sudo docker pull $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}"
 
 
