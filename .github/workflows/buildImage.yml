@@ -19,13 +19,13 @@ jobs:
     - name: docker login
       run: | 
         docker login -u $DOCKER_USER -p $DOCKER_TOKEN
-    - name: Get current date 
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
+        
+    - name: Get build hash
+      run: echo BUILD_NUMBER=${GITHUB_SHA::7} >> $GITHUB_ENV
     - name: Build the Docker image 
-      run: docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
+      run: docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:$BUILD_NUMBER
     - name: Docker Push
-      run: docker push $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
+      run: docker push $DOCKER_USER/$REPO_NAME:$BUILD_NUMBER
       
   deploy:
     needs: build
@@ -44,6 +44,6 @@ jobs:
         chmod 600 key.pem
     - name: Pull Docker image
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} "sudo docker pull $DOCKER_USER/$REPO_NAME:$TAG_VAR"
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} "sudo docker pull $DOCKER_USER/$REPO_NAME:$BUILD_NUMBER"
 
 
