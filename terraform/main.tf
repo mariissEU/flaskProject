@@ -6,6 +6,12 @@ terraform {
       version = "~> 5.0"
     }
   }
+    backend "s3" {
+    # Replace this with your bucket name!
+    bucket         = "maris-test-s3-bucket"
+    key            = "terraform.tfstate"
+    region         = "us-west-1"
+  }
 }
 
 # Configure the AWS Provider
@@ -116,42 +122,6 @@ resource "aws_security_group" "maris-test-sg" {
   tags = {
     Name = "maris-test-sg_TF"
     Owner = "Maris Liepins"
-  }
-}
-
-# Create S3 bucket
-resource "aws_s3_bucket" "maris-test-s3-bucket" {
-  bucket = "maris-test-s3-bucket"
-
-  tags = {
-    Name = "maris-test-s3-bucket_TF"
-    Owner = "Maris Liepins"
-  }
-}
-
-resource "aws_s3_bucket_versioning" "S3_versioning" {
-  bucket = aws_s3_bucket.maris-test-s3-bucket.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "public_access" {
-  bucket = aws_s3_bucket.maris-test-s3-bucket.id
-
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
-}
-
-resource "aws_s3_access_point" "maris-test-ap" {
-  bucket = aws_s3_bucket.maris-test-s3-bucket.id
-  name   = "maris-test-ap"
-
-  # VPC must be specified for S3 on Outposts
-  vpc_configuration {
-    vpc_id = aws_vpc.maris-test-vpc.id
   }
 }
 
