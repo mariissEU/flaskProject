@@ -1,10 +1,10 @@
-name: Python Flask GitHub action for docker registry 
+sname: Python Flask GitHub action for docker registry 
 on:
   workflow_dispatch:
 
 # Env variable
 env:
-  DOCKER_USER: ${{secrets.DOCKER_USER}}
+  DOCKER_USER: sselluos
   DOCKER_TOKEN: ${{secrets.DOCKER_HUB_TOKEN}}
   AWS_PRIVATE_KEY: ${{secrets.AWS_EC2_PRIVATE_KEY}}
   REPO_NAME: flaskproject
@@ -43,6 +43,6 @@ jobs:
         chmod 600 key.pem
     - name: Pull Docker image
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@50.18.236.167 "sudo docker pull 'sselluos/flaskproject:latest'"
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} "sudo docker pull ${DOCKER_USER}/flaskproject:latest"
 
 
