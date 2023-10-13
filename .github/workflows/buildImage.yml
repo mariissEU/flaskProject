@@ -50,4 +50,4 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} 'docker rm flaskapp || true'
     - name: Run new container
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@50.18.236.167 "docker run -d --name flaskapp -p 8080:5000 sselluos/flaskproject:latest"
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@50.18.236.167 "docker run -d --name flaskapp -p 8080:8080 sselluos/flaskproject:latest"
