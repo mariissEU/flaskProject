@@ -1,4 +1,4 @@
-sname: Python Flask GitHub action for docker registry 
+name: Python Flask GitHub action for docker registry 
 on:
   workflow_dispatch:
 
