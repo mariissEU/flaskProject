@@ -1,0 +1,23 @@
+name: Create S3 bucket
+
+on:
+  workflow_dispatch:
+    inputs:
+      S3BucketName:
+        description: 'S3 bucket name'
+        required: true
+        
+jobs:
+  aws_job:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Set up AWS CLI         
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1  # Change this to your desired region
+          
+      - name: Create S3 bucket
+        run: aws s3api create-bucket --bucket ${{ github.event.inputs.S3BucketName }} --create-bucket-configuration LocationConstraint=us-west-1 --versioning-configuration Status=Enabled --server-side-encryption Configuration={EncryptionRules=[{ApplyServerSideEncryptionByDefault={SSEAlgorithm=AES256}}]}
