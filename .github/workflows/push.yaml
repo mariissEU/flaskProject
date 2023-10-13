@@ -1,14 +1,14 @@
-name: Create S3 bucket
+name: Terraform
 
 on:
   workflow_dispatch:
 
 jobs: 
-  check-code:
+  terraform-flow:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: /terraform
+        working-directory: ./terraform
     permissions:
       pull-requests: write
     steps:
