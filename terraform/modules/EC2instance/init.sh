@@ -23,8 +23,4 @@ sudo usermod -aG docker ubuntu
 # init docker swarm
 sudo docker swarm init
 
-echo "install portainer on docker swarm"
-curl -L https://downloads.portainer.io/ce2-19/portainer-agent-stack.yml -o portainer-agent-stack.yml
-docker stack deploy -c portainer-agent-stack.yml portainer
-
 exit 0
