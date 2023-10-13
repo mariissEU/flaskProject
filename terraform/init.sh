@@ -2,10 +2,6 @@
 echo "Update linux to latest"
 sudo apt update -y && sudo apt upgrade -y
 
-echo "Install java 17 version on server"
-sudo apt install -y openjdk-17-jre
-sudo apt install -y openjdk-17-jdk
-
 echo "Install docker"
 
 # Add Docker's official GPG key:
