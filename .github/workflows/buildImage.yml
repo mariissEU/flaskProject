@@ -9,6 +9,7 @@ env:
   AWS_PRIVATE_KEY: ${{secrets.AWS_EC2_PRIVATE_KEY}}
   REPO_NAME: flaskproject
   EC2_PUBLIC_IP: 50.18.236.167
+  TAG_VAR: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
 
 jobs:
   build:  
@@ -43,6 +44,6 @@ jobs:
         chmod 600 key.pem
     - name: Pull Docker image
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} "sudo docker pull $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}"
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} "sudo docker pull $DOCKER_USER/$REPO_NAME:$TAG_VAR"
 
 
