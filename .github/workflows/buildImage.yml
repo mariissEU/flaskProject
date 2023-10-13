@@ -40,13 +40,7 @@ jobs:
     - name: Docker Pull & Run from Hub
       uses: appleboy/ssh-action@master
       with:
-        host: ${EC2_PUBLIC_IP}
+        host: 50.18.236.167
         username: ubuntu
         key: ${AWS_PRIVATE_KEY}
-        envs: GITHUB_SHA
-        script: |
-          docker login
-          docker pull ${DOCKER_USER}/${REPO_NAME}:latest
-          docker stop flaskapp
-          docker rm flaskapp
-          docker run -d --name flaskapp -p 8080:8080 ${DOCKER_USER}/${REPO_NAME}:latest
+        script: whoami
