@@ -22,6 +22,6 @@ resource "aws_instance" "maris-test-ec2instance" {
     delete_on_termination = true
   }
 
-  user_data = "${file("/modules/EC2instance/init.sh")}"
+  user_data = "${file("modules/EC2instance/init.sh")}"
 
 }
