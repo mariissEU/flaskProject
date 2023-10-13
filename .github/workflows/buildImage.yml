@@ -40,9 +40,9 @@ jobs:
     - name: Docker Pull & Run from Hub
       uses: appleboy/ssh-action@master
       with:
-        host: $EC2_PUBLIC_IP
+        host: ${EC2_PUBLIC_IP}
         username: ubuntu
-        key: $AWS_PRIVATE_KEY
+        key: ${AWS_PRIVATE_KEY}
         envs: GITHUB_SHA
         script: |
           docker login
