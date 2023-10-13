@@ -37,10 +37,14 @@ jobs:
       with:
         username: ${{ env.DOCKER_USER }}
         password: ${{ env.DOCKER_TOKEN }}
+    - name: Set permissions for private key
+      run: |
+        echo "${{ env.AWS_PRIVATE_KEY }}" > key.pem
+        chmod 600 key.pem
     - name: Docker Pull & Run from Hub
       uses: appleboy/ssh-action@master
       with:
         host: 50.18.236.167
         username: ubuntu
-        key: ${AWS_PRIVATE_KEY}
+        key: key.pem
         script: whoami
