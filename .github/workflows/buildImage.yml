@@ -9,7 +9,7 @@ env:
   AWS_PRIVATE_KEY: ${{secrets.AWS_EC2_PRIVATE_KEY}}
   REPO_NAME: flaskproject
   EC2_PUBLIC_IP: 50.18.236.167
-  TAG_VAR: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
+  TAG_VAR: latest
 
 jobs:
   build:  
