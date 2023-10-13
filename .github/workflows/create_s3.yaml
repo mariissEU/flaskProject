@@ -20,4 +20,4 @@ jobs:
           aws-region: us-west-1  # Change this to your desired region
           
       - name: Create S3 bucket
-        run: aws s3api create-bucket --bucket ${{ github.event.inputs.S3BucketName }} --create-bucket-configuration LocationConstraint=us-west-1 --versioning-configuration Status=Enabled --server-side-encryption Configuration={EncryptionRules=[{ApplyServerSideEncryptionByDefault={SSEAlgorithm=AES256}}]}
+        run: aws s3api create-bucket --bucket ${{ github.event.inputs.S3BucketName }} --create-bucket-configuration LocationConstraint=us-west-1 --versioning-configuration Status=Enabled --server-side-encryption AES256
