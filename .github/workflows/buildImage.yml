@@ -4,27 +4,42 @@ on:
 
 # Env variable
 env:
-  DOCKER_USER: sselluos
+  DOCKER_USER: ${{secrets.DOCKER_USER}}
   DOCKER_TOKEN: ${{secrets.DOCKER_HUB_TOKEN}}
   AWS_PRIVATE_KEY: ${{secrets.AWS_EC2_PRIVATE_KEY}}
-  REPO_NAME: flaskproject
+  REPO_NAME: sselluos/flaskproject
   EC2_PUBLIC_IP: 50.18.236.167
-  TAG_VAR: latest
+  VERSION_VAR: 1.0.0
+  S3_BUCKET: maris-test-s3-bucket
+
 
 jobs:
   build:  
     runs-on: ubuntu-latest  
     steps:
     - uses: actions/checkout@v4 
-    - name: docker login
-      run: | 
-        docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ env.DOCKER_USER }}
+        password: ${{ env.DOCKER_TOKEN }}
     - name: Get build hash
       run: echo BUILD_NUMBER=${GITHUB_SHA::7} >> $GITHUB_ENV
     - name: Build the Docker image 
-      run: docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:$BUILD_NUMBER
+      run: docker build . --file Dockerfile --tag ${REPO_NAME}:${VERSION_VAR}-${BUILD_NUMBER}
     - name: Docker Push
-      run: docker push $DOCKER_USER/$REPO_NAME:$BUILD_NUMBER
+      run: docker push ${REPO_NAME}:${VERSION_VAR}-${BUILD_NUMBER}
+    
+    - name: Make tar from image.
+      run: docker save ${REPO_NAME}:${VERSION_VAR}-${BUILD_NUMBER} | gzip > flaskapp:${VERSION_VAR}.tar
+    - name: Set up AWS CLI         
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-1  
+    - name: Send Image to S3 bucket
+      run: aws s3 cp flaskapp:${VERSION_VAR}.tar s3://${S3_BUCKET}/images/
       
   deploy:
     needs: build
@@ -41,18 +56,18 @@ jobs:
         password: ${{ env.DOCKER_TOKEN }}
     - name: Set permissions for private key
       run: |
-        echo "${{ env.AWS_PRIVATE_KEY }}" > key.pem
-        chmod 600 key.pem
+        echo "${{ env.AWS_PRIVATE_KEY }}" > AWSkey.pem
+        chmod 600 AWSkey.pem
     - name: Pull Docker image
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} "sudo docker pull ${DOCKER_USER}/${REPO_NAME}:${BUILD_NUMBER}"
+        ssh -o StrictHostKeyChecking=no -i AWSkey.pem ubuntu@${EC2_PUBLIC_IP} "sudo docker pull ${REPO_NAME}:${VERSION_VAR}-${BUILD_NUMBER}"
     - name: Stop running container
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} 'docker stop flaskapp || true'
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${EC2_PUBLIC_IP} 'docker rm flaskapp || true'
+        ssh -o StrictHostKeyChecking=no -i AWSkey.pem ubuntu@${EC2_PUBLIC_IP} 'docker stop flaskapp || true'
+        ssh -o StrictHostKeyChecking=no -i AWSkey.pem ubuntu@${EC2_PUBLIC_IP} 'docker rm flaskapp || true'
     - name: Run new container
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@50.18.236.167 "docker run -d --name flaskapp -p 8080:8080 ${DOCKER_USER}/${REPO_NAME}:${BUILD_NUMBER}"
+        ssh -o StrictHostKeyChecking=no -i AWSkey.pem ubuntu@50.18.236.167 "docker run -d --name flaskapp -p 8080:8080 ${REPO_NAME}:${VERSION_VAR}-${BUILD_NUMBER}"
 
 
 

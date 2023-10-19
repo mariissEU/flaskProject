@@ -10,6 +10,8 @@ terraform {
     bucket         = "maris-test-s3-bucket"
     key            = "tfstate/terraform.tfstate"
     region         = "us-west-1"
+    dynamodb_table = "terraform-up-and-running-locks-maris"
+    encrypt        = true
   }
 }
 
