@@ -80,5 +80,9 @@ def delete(id):
     flash('"{}" was successfully deleted!'.format(post['title']))
     return redirect(url_for('index'))
 
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
