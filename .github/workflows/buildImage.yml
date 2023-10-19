@@ -1,6 +1,8 @@
 name: Python Flask GitHub action for docker registry 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 # Env variable
 env:
