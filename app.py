@@ -82,7 +82,7 @@ def delete(id):
 
 @app.errorhandler(404)
 def not_found_error(error):
-    return render_template('404.html')
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
