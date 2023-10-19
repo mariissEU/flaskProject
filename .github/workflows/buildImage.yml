@@ -11,7 +11,7 @@ env:
   AWS_PRIVATE_KEY: ${{secrets.AWS_EC2_PRIVATE_KEY}}
   REPO_NAME: sselluos/flaskproject
   EC2_PUBLIC_IP: 54.176.78.126
-  VERSION_VAR: 2.0.2
+  VERSION_VAR: 2.0.3
   S3_BUCKET: maris-test-s3-bucket
 
 

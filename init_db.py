@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect('database/database.db')
+connection = sqlite3.connect('/python-docker/database/database.db')
 
 
 with open('schema.sql') as f:
