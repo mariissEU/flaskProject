@@ -67,7 +67,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i AWSkey.pem ubuntu@${EC2_PUBLIC_IP} 'docker rm flaskapp || true'
     - name: Run new container
       run: |
-        ssh -o StrictHostKeyChecking=no -i AWSkey.pem ubuntu@50.18.236.167 "docker run -d --name flaskapp -p 8080:8080 ${REPO_NAME}:${VERSION_VAR}-${BUILD_NUMBER}"
+        ssh -o StrictHostKeyChecking=no -i AWSkey.pem ubuntu@${EC2_PUBLIC_IP} "docker run -d --name flaskapp -p 8080:8080 ${REPO_NAME}:${VERSION_VAR}-${BUILD_NUMBER}"
 
 
 
