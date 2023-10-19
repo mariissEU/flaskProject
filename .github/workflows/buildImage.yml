@@ -4,7 +4,7 @@ on:
 
 # Env variable
 env:
-  DOCKER_USER: ${{secrets.DOCKER_USER}}
+  DOCKER_USER: sselluos
   DOCKER_TOKEN: ${{secrets.DOCKER_HUB_TOKEN}}
   AWS_PRIVATE_KEY: ${{secrets.AWS_EC2_PRIVATE_KEY}}
   REPO_NAME: sselluos/flaskproject
