@@ -6,7 +6,7 @@ provider "aws" {
 resource "aws_instance" "maris-test-ec2instance" {
   ami           = "ami-0f8e81a3da6e2510a"
   instance_type = var.instance_type
-  count = "1"
+  count = 1
   key_name = var.key
   associate_public_ip_address = true
   subnet_id     = var.subnet_id_var
